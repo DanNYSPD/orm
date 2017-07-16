@@ -19,7 +19,13 @@ import lindan.nyspd.orm.models.visualParadigm.DBColumn;
 import lindan.nyspd.orm.models.visualParadigm.DBTable;
 import lindan.nyspd.orm.models.visualParadigm.Enums;
 import lindan.nyspd.util.function.Consumer;
-
+/**
+ * clase core, se encarga de leer un archivo xml de visual paradigm 
+ * y extraer las tablas y atriburos que contiene.
+ * La logica esta basada en cmo visualParadimg guarda los xml de los modelos ERM en su version 14.0
+ * @author daniel
+ *
+ */
 public class ReadXML {
 	
 	
@@ -46,14 +52,18 @@ public class ReadXML {
 		 return doc;
 		
 	}
+	/*
+	 * metodo que recibe el path del xml para leerlo y generar la lista de tablas
+	 */
 	public List<DBTable> generateSchemeFromXML(String path) {
 		List<DBTable> scheme= new ArrayList<>();
 		Document doc=readXML(path);
 		if(doc==null)
 			return scheme;
+		// en base al analisis del xml solo el prime tag models es el relevante
 		Node modelsNode = doc.getElementsByTagName(Enums.TAGS.Models).item(0);
 		System.out.println("--------------------------lenf de models--"+doc.getElementsByTagName(Enums.TAGS.Models).getLength());
-	
+		//hacemos el casting para poder extraer los elementos con el metoodo getElementsByTagName();
 		Element modelsElement=(Element)modelsNode;
 		
 
@@ -74,7 +84,7 @@ public class ReadXML {
 		//scheme.forEach(System.out::println);		
 	}
 	/**
-	 * Recibe una lista de nodos de tipo DBTABLE
+	 * Recibe una lista de nodos de tipo (que representan una tabla en el xml)
 	 * @param nList
 	 * @return colleciion de tipo DBTABLE que representa el esquema
 	 */
@@ -89,7 +99,8 @@ public class ReadXML {
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 					
 				Element eElement = (Element) nNode;
-				if(eElement.hasAttribute("Idref")){
+				// si tiene el atributi "Idref" lo saltamos 
+				if(eElement.hasAttribute("Idref")){ 
 					continue;
 				}
 				DBTable dbTable=crearTabla(eElement);

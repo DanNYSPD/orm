@@ -7,8 +7,8 @@ package lindan.nyspd.orm.util;
  */
 public interface ITypesHelper {
 	
-	String getLanguageType(String datatableType);
-	String getLanguageType(String datatableType,int length);
+	String getLanguageType(String columnType);
+	String getLanguageType(String columnType,int length);
 	
 	//enum ITypesHelperModel
 }
